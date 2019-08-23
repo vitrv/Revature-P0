@@ -7,14 +7,28 @@ namespace PizzaBox.Client
     {
         static void Main(string[] args)
         {
-          Console.WriteLine("Hello World!");
-
+          //TODO:
+          //tests
+          //cli
+          //data
+          //login/register commands
+          //view/set location commands
+          //edit pizza commands
+          //preset pizzas
+          //confirm/view order
+          //order history
+          //signout
+          //exception handling
+          Session s = new Session();
+          
           Location l = new Location("aaa", "bbb");
+          Location l2 = new Location("bbb", "sdfg");
+          Location l3 = new Location("ccc", "jhgfdfgh");
           Cheese c = new Cheese("good", (decimal)5.99);
           l.Inventory.SetInventory(c, 3);
 
-            //Session s = new Session();
-            /* s.SessionStart();
+          
+          System.Console.WriteLine(s.SessionStart());
             while(true)
             {
               
@@ -24,8 +38,8 @@ namespace PizzaBox.Client
               {
                 Environment.Exit(0);
               }
-              System.Console.WriteLine(s.SessionNext(input));
-            }*/
+              System.Console.WriteLine(s.SessionNext(input.Split(' ')));
+            }
 
 
             

@@ -4,16 +4,24 @@ namespace PizzaBox.Domain
 {
   public class Location
   {
-    private string name;
-    private string address;
+    public string Name {get; set;}
+    public string Address{get; set;}
 
-    private List<Order> orderlog;
+    public List<Order> orderlog;
     public Inventory Inventory {get; set;}
 
     public Location(string _name, string _address)
     {
-      name = _name;
-      address = _address;
+      Name = _name;
+      Address = _address;
+      Inventory = new Inventory();
+      orderlog = new List<Order>();
+      Session.locations.Add(this);
+    }
+
+    public override string ToString()
+    {
+      return Name;
     }
     
       

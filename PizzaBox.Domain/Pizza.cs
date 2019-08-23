@@ -13,6 +13,23 @@ namespace PizzaBox.Domain
 
       private List<Topping> _toppings;
 
+      
+      public Pizza()
+      {
+        _toppings = new List<Topping>();
+      }
+      public override string ToString()
+      {
+        string output = "Crust: " + Crust.ToString() + "\n" +
+              "Size: " + Size.ToString() + "\n" +
+              "Cheese: " + Cheese.ToString() + "\n" +
+              "Toppings: ";
+        foreach (var t in _toppings)
+        {
+          output = output + t.ToString() + "\n";
+        }
+        return output;
+      }
       public decimal GetCost()
       {
         decimal cost = 0;

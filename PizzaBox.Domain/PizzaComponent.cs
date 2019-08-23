@@ -13,6 +13,11 @@ namespace PizzaBox.Domain
       Cost = _cost;
     }
 
+    public override string ToString()
+    {
+      return Name + " " + Cost;
+    }
+
   }
       
     

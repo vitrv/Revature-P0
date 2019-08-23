@@ -11,11 +11,36 @@ namespace PizzaBox.Domain
       item = i;
       quantity = q;
     }
+    public override string ToString()
+    {
+      return item.ToString() + quantity;
+    }
   }
   public class Inventory
   {
     private List<Size> _sizes;
     private List<InventoryItem> _inventory;
+
+    public Inventory()
+    {
+      _sizes = new List<Size>();
+      _inventory = new List<InventoryItem>();
+    }
+
+    public override string ToString()
+    {
+      string output = "Sizes:\n";
+      foreach (var s in _sizes)
+      {
+        output = output + s.ToString() + "\n";
+      }
+      output += "Ingredients:\n";
+      foreach (var i in _inventory)
+      {
+        output = output + i.ToString() + "\n";
+      }
+      return output;
+    }
 
     public void AddSize(Size s)
     {
@@ -57,7 +82,7 @@ namespace PizzaBox.Domain
       else
       {
         InventoryItem item = new InventoryItem(p, amt);
-        _inventory.Add(i);
+        _inventory.Add(item);
       }
     }
 
