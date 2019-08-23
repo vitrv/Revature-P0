@@ -69,5 +69,18 @@ namespace PizzaBox.Domain
         _toppings.Add(t);
       }
 
+    internal string RemoveTopping(string name)
+    {
+      foreach (var t in _toppings)
+      {
+        if(t.Name = name)
+        {
+          _toppings.Remove(t);
+          return "Removed " + name;
+        } 
+      }
+      return $"{name} not found on pizza.";
+      
     }
+  }
 }

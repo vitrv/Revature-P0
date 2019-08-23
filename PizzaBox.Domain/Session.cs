@@ -89,6 +89,10 @@ namespace PizzaBox.Domain
           {
             return AddToPizza(input[1], input[3], input[4]);
           }
+          if(input[2] == "remove" || input[2] == "rm")
+          {
+            return RemoveFromPizza(input[1], input[3], input[4]);
+          }
         }
         if(c == "order")
         {
@@ -110,7 +114,39 @@ namespace PizzaBox.Domain
         return "No command found for: " + c;
       }
 
-      private string ViewLocationHistory()
+    private string RemoveFromPizza(string id, string kind, string name)
+    {
+        int index = int.Parse(id) - 1;
+        if (index >= order._pizzas.Count)
+        {
+          return "An error occured.";
+        }
+        Pizza p = order._pizzas[index];
+        if(kind == "size")
+        {
+          p.Size = null;
+          return $"Removed {kind} {name} from Pizza {id}";
+        }
+        if(kind == "cheese")
+        {
+          p.Cheese = null;
+          return $"Removed {kind} {name} from Pizza {id}";
+
+        }
+        if(kind == "crust")
+        {
+          p.Crust = null;
+          return $"Removed {kind} {name} from Pizza {id}";
+        }
+        if(kind == "topping")
+        {
+          return p.RemoveTopping(name);
+        }
+
+        return "Invalid command.";
+    }
+
+    private string ViewLocationHistory()
       {
         string output = "Order History:\n";
         foreach(var o in location.orderlog)
@@ -211,7 +247,20 @@ namespace PizzaBox.Domain
 
       private string Help()
       {
-        throw new NotImplementedException();
+        return "Commands: \n" +
+        "register <username>\n" +
+        "login <username>\n" +
+        "logout\n" +
+        "location view\n" +
+        "location select <location_name>\n" +
+        "location menu\n" +
+        "location history\n" +
+        "pizza new custom\n" +
+        "pizza <id> add <crust|cheese|size|topping> <name>\n" +
+        "pizza <id> remove <crust|cheese|size|topping> <name>\n" +
+        "order view\n" +
+        "order confirm\n" +
+        "order history\n";
       }
 
       private string ViewInventory()
