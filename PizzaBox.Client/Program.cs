@@ -8,7 +8,6 @@ namespace PizzaBox.Client
         static void Main(string[] args)
         {
           //TODO:
-          //tests
           //data
           //preset pizzas
           //exception handling
