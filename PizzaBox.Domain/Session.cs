@@ -70,6 +70,10 @@ namespace PizzaBox.Domain
           {
             return SelectLocation(input[2]);
           }
+          if(input[1] == "history")
+          {
+            return ViewLocationHistory();
+          }
         }
         if(c == "pizza")
         {
@@ -106,9 +110,68 @@ namespace PizzaBox.Domain
         return "No command found for: " + c;
       }
 
+      private string ViewLocationHistory()
+      {
+        string output = "Order History:\n";
+        foreach(var o in location.orderlog)
+        {
+          output = output + o.ToString() + "\n";
+        }
+        return output;
+      }
+
       private string AddToPizza(string id, string kind, string name)
       {
-        throw new NotImplementedException();
+        int index = int.Parse(id) - 1;
+        if (index >= order._pizzas.Count)
+        {
+          return "An error occured.";
+        }
+        Pizza p = order._pizzas[index];
+
+        if(kind == "size")
+        {
+          Size s = location.Inventory.GetSize(name);
+          if(!(s is null))
+          {
+            p.Size = s;
+            return $"Added {kind} {name} to Pizza {id}";
+          }
+          else return $"{kind} {name} not found.";
+        }
+        if(kind == "cheese")
+        {
+          Cheese c = (Cheese) location.Inventory.GetInventoryItem(name).item;
+          if(!(c is null))
+          {
+            p.Cheese = c;
+            return $"Added {kind} {name} to Pizza {id}";
+          }
+          else return $"{kind} {name} not found.";
+        }
+        if(kind == "crust")
+        {
+          Crust c = (Crust) location.Inventory.GetInventoryItem(name).item;
+          if(!(c is null))
+          {
+            p.Crust = c;
+            return $"Added {kind} {name} to Pizza {id}";
+          }
+          else return $"{kind} {name} not found.";
+        }
+        if(kind == "topping")
+        {
+          Topping t = (Topping) location.Inventory.GetInventoryItem(name).item;
+          if(!(t is null))
+          {
+            p.AddTopping(t);
+            return $"Added {kind} {name} to Pizza {id}";
+          }
+          else return $"{kind} {name} not found.";
+
+        }
+
+        return "Invalid command.";
       }
 
       private string NewCustomPizza()
@@ -119,13 +182,26 @@ namespace PizzaBox.Domain
 
       private string ViewHistory()
       {
-        throw new NotImplementedException();
+        string output = "Order History:\n";
+        foreach(var o in user.orderlog)
+        {
+          output = output + o.ToString() + "\n";
+        }
+        return output;
       }
 
       private string ConfirmOrder()
       {
-        location.orderlog.Add(order);
-        order = null;
+        if(!(user is null))
+        {
+          user.orderlog.Add(order);
+          location.orderlog.Add(order);
+          order = null;
+          return "Order confirmed.";
+        }
+
+        return "Must log in to place order.";
+
       }
 
       private string ViewOrder()

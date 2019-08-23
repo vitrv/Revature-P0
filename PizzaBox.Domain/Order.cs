@@ -5,7 +5,7 @@ namespace PizzaBox.Domain
 {
     public class Order
     {
-      private List<Pizza> _pizzas;
+      public List<Pizza> _pizzas;
 
       public Order()
       {
@@ -23,6 +23,7 @@ namespace PizzaBox.Domain
               p.ToString() + "\n";
             c++;
         }
+        output += "Total Cost: " + GetCost() + "\n";
         return output;
       }
 

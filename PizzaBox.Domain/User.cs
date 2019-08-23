@@ -6,11 +6,12 @@ namespace PizzaBox.Domain
   {
 
     public string Username {get; set;}
-    //List<Order> order;
+    public List<Order> orderlog;
 
     public User(string _name)
     {
       Username = _name;
+      orderlog = new List<Order>();
     }
 
   }

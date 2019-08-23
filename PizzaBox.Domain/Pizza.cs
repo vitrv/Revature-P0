@@ -20,19 +20,44 @@ namespace PizzaBox.Domain
       }
       public override string ToString()
       {
-        string output = "Crust: " + Crust.ToString() + "\n" +
-              "Size: " + Size.ToString() + "\n" +
-              "Cheese: " + Cheese.ToString() + "\n" +
-              "Toppings: ";
+        string output = "";
+
+        if (!(Crust is null))
+        {
+          output += "Crust: " + Crust.ToString() + "\n";
+        }
+        if (!(Size is null))
+        {
+          output += "Size: " + Size.ToString() + "\n";
+        }
+        if (!(Cheese is null))
+        {
+          output += "Cheese: " + Cheese.ToString() + "\n";
+        }
+  
+        output += "Toppings: \n";
         foreach (var t in _toppings)
         {
           output = output + t.ToString() + "\n";
         }
+        output += "Cost: " + GetCost();
         return output;
       }
       public decimal GetCost()
       {
         decimal cost = 0;
+        if (!(Crust is null))
+        {
+          cost += Crust.Cost;
+        }
+        if (!(Cheese is null))
+        {
+          cost += Cheese.Cost;
+        }
+        if (!(Size is null))
+        {
+          cost += Size.Cost;
+        }
         foreach (Topping t in _toppings)
         {
           cost += t.Cost;
