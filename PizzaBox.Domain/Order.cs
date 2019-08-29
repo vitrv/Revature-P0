@@ -36,11 +36,14 @@ namespace PizzaBox.Domain
         }
         return cost;
       }
-      public Pizza AddPizza()
+      public void AddPizza()
       {
         Pizza p = new Pizza();
         _pizzas.Add(p);
-        return p;
+      }
+      public void AddPizza(Pizza p)
+      {
+        _pizzas.Add(p);
       }
 
 

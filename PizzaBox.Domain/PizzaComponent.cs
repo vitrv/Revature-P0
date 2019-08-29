@@ -15,7 +15,8 @@ namespace PizzaBox.Domain
 
     public override string ToString()
     {
-      return Name + " " + Cost;
+      string[] t = this.GetType().ToString().Split('.');
+      return $"{t[2]}: {Name} \t\t Cost: ${Cost}";
     }
 
   }

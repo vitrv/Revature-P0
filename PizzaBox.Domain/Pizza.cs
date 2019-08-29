@@ -73,7 +73,7 @@ namespace PizzaBox.Domain
     {
       foreach (var t in _toppings)
       {
-        if(t.Name == name)
+        if(t.Name.ToLower() == name.ToLower())
         {
           _toppings.Remove(t);
           return "Removed " + name;

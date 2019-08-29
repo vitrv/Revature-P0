@@ -13,7 +13,7 @@ namespace PizzaBox.Domain
     }
     public override string ToString()
     {
-      return item.ToString() + quantity;
+      return $"{item.ToString()} \t\t Quantity: {quantity}";
     }
   }
   public class Inventory
@@ -63,7 +63,7 @@ namespace PizzaBox.Domain
     {
       foreach (Size s in _sizes)
       {
-        if(s.Name == name)
+        if(s.Name.ToLower() == name.ToLower())
         {
           return s;
         }
@@ -91,7 +91,7 @@ namespace PizzaBox.Domain
     {
       foreach (InventoryItem i in _inventory)
       {
-        if(i.item.Name == name)
+        if(i.item.Name.ToLower() == name.ToLower())
         {
           return i;
         }

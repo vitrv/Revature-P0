@@ -33,7 +33,6 @@ namespace PizzaBox.Domain
 
       public string SessionNext(string[] input)
       {
-        //listen for commands
         string c = input[0];
 
         if(c == "exit")
@@ -74,16 +73,24 @@ namespace PizzaBox.Domain
           {
             return ViewLocationHistory();
           }
+          return "Invalid behavior for: location" + input[1];
         }
         if(c == "pizza")
-        {
+        { if(input[1] == "list")
+          {
+            return ListPresetPizzas();
+          }
           if(input[1] == "new")
           {
             if(input[2] == "custom")
             {
               return NewCustomPizza();
             }
-            
+            //add specialty pizzas here
+            if(input[2] == "hawaiian")
+            {
+              return NewHawaiianPizza();
+            }
           }
           if(input[2] == "add")
           {
@@ -93,6 +100,7 @@ namespace PizzaBox.Domain
           {
             return RemoveFromPizza(input[1], input[3], input[4]);
           }
+          return "Invalid behavior for: pizza" + input[1];
         }
         if(c == "order")
         {
@@ -108,18 +116,37 @@ namespace PizzaBox.Domain
           {
             return ViewHistory();
           }
-
+          return "Invalid behavior for: order " + input[1];
         }
 
         return "No command found for: " + c;
       }
+
+    private string NewHawaiianPizza()
+    {
+      PizzaFactory pf = new PizzaFactory(location);
+      Pizza p = pf.MakeHawaiian();
+      if (!(p is null))
+      {
+        order.AddPizza(p);
+        return "Added new hawaiian pizza";
+      }
+
+      return "Error: Could not make specialty pizza with ingredients at location";
+    }
+
+    private string ListPresetPizzas()
+    {
+      PizzaFactory pf = new PizzaFactory(location);
+      return pf.ListPresets();
+    }
 
     private string RemoveFromPizza(string id, string kind, string name)
     {
         int index = int.Parse(id) - 1;
         if (index >= order._pizzas.Count)
         {
-          return "An error occured.";
+          return "Pizza " + id + "does not exist.";
         }
         Pizza p = order._pizzas[index];
         if(kind == "size")
@@ -143,7 +170,7 @@ namespace PizzaBox.Domain
           return p.RemoveTopping(name);
         }
 
-        return "Invalid command.";
+        return $"Ingredient type: {kind} does not exist. Must specify cheese, size, crust or topping.";
     }
 
     private string ViewLocationHistory()
@@ -161,7 +188,7 @@ namespace PizzaBox.Domain
         int index = int.Parse(id) - 1;
         if (index >= order._pizzas.Count)
         {
-          return "An error occured.";
+          return $"Pizza {id} does not exist.";
         }
         Pizza p = order._pizzas[index];
 
@@ -207,7 +234,7 @@ namespace PizzaBox.Domain
 
         }
 
-        return "Invalid command.";
+        return $"Ingredient type: {kind} does not exist. Must specify cheese, size, crust or topping.";
       }
 
       private string NewCustomPizza()
@@ -255,7 +282,9 @@ namespace PizzaBox.Domain
         "location select <location_name>\n" +
         "location menu\n" +
         "location history\n" +
+        "pizza list" +
         "pizza new custom\n" +
+        "pizza new <type>" +
         "pizza <id> add <crust|cheese|size|topping> <name>\n" +
         "pizza <id> remove <crust|cheese|size|topping> <name>\n" +
         "order view\n" +
@@ -275,7 +304,7 @@ namespace PizzaBox.Domain
       private string Logout()
       {
         user = null;
-        return "Logged out.";
+        return "Logging out...";
       }
 
       private string ListLocations()
@@ -291,7 +320,7 @@ namespace PizzaBox.Domain
       {
         foreach (User u in users)
         {
-          if (u.Username == name)
+          if (u.Username.ToLower() == name.ToLower())
           {
             user = u;
             return "Logged in as: " + name; 
@@ -303,6 +332,13 @@ namespace PizzaBox.Domain
 
       public string RegisterUser(string name)
       {
+        foreach (User u in users)
+        {
+          if (u.Username.ToLower() == name.ToLower())
+          {
+            return "Error: Username is taken.";
+          }
+        }
         users.Add(new User(name));
         return "Registered account: " + name;
       }
@@ -310,7 +346,7 @@ namespace PizzaBox.Domain
       {
         foreach (var l in locations)
         {
-          if(name == l.Name)
+          if(name.ToLower() == l.Name.ToLower())
           {
             location = l;
             return "Selected location " + name;

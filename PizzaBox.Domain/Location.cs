@@ -21,7 +21,7 @@ namespace PizzaBox.Domain
 
     public override string ToString()
     {
-      return Name;
+      return $"{Name} - {Address}";
     }
     
       
