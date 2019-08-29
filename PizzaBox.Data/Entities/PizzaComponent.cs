@@ -8,5 +8,8 @@ namespace PizzaBox.Data.Entities
         public int Pcid { get; set; }
         public int PizzaId { get; set; }
         public int Cid { get; set; }
+
+        public virtual Component C { get; set; }
+        public virtual Pizza Pizza { get; set; }
     }
 }

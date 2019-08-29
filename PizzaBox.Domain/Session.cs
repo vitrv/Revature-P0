@@ -13,11 +13,14 @@ namespace PizzaBox.Domain
 
       private Order order;
 
+      private DataAccess data;
+
       public Session()
       {
         locations = new List<Location>();
         users = new List<User>();
         order = new Order();
+        data = new DataAccess();
       }
 
       public string SessionStart()

@@ -9,5 +9,8 @@ namespace PizzaBox.Data.Entities
         public int LocId { get; set; }
         public int Cid { get; set; }
         public int Quantity { get; set; }
+
+        public virtual Component C { get; set; }
+        public virtual Location Loc { get; set; }
     }
 }

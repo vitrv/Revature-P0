@@ -64,6 +64,18 @@ namespace PizzaBox.Data.Entities
                 entity.ToTable("InventoryItem", "Pizza");
 
                 entity.Property(e => e.Cid).HasColumnName("CId");
+
+                entity.HasOne(d => d.C)
+                    .WithMany(p => p.InventoryItem)
+                    .HasForeignKey(d => d.Cid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CID2");
+
+                entity.HasOne(d => d.Loc)
+                    .WithMany(p => p.InventoryItem)
+                    .HasForeignKey(d => d.LocId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_LocID2");
             });
 
             modelBuilder.Entity<Location>(entity =>
@@ -118,6 +130,18 @@ namespace PizzaBox.Data.Entities
                 entity.ToTable("PizzaComponent", "Pizza");
 
                 entity.Property(e => e.Pcid).HasColumnName("PCId");
+
+                entity.HasOne(d => d.C)
+                    .WithMany(p => p.PizzaComponent)
+                    .HasForeignKey(d => d.Cid)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_CID");
+
+                entity.HasOne(d => d.Pizza)
+                    .WithMany(p => p.PizzaComponent)
+                    .HasForeignKey(d => d.PizzaId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_PizzaID");
             });
 
             modelBuilder.Entity<User>(entity =>
