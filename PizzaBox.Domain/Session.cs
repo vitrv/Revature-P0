@@ -27,9 +27,9 @@ namespace PizzaBox.Domain
       {
         //set up data, print commands
 
-        return  "------------------------\n" +
-                "| Welcome To PizzaCLI! |\n" +
-                "------------------------\n" +
+        return  "----------------------------\n" +
+                "| Welcome To PizzaBox CLI! |\n" +
+                "----------------------------\n" +
                 "Enter \"help\" for a list of commands,\n" +
                 "or \"exit\" to exit.";
       }
@@ -321,29 +321,26 @@ namespace PizzaBox.Domain
       }
       public string Login(string name)
       {
-        foreach (User u in users)
+        User u = data.GetUser(name);
+        if(!(u is null))
         {
-          if (u.Username.ToLower() == name.ToLower())
-          {
-            user = u;
-            return "Logged in as: " + name; 
-          }
+          user = u;
+          return $"Logged in as {name}.";
         }
-        return "No account found for: " + name;
+        return $"Account {name} not found.";
       }
 
 
       public string RegisterUser(string name)
       {
-        foreach (User u in users)
+        if(data.GetUser(name) is null)
         {
-          if (u.Username.ToLower() == name.ToLower())
-          {
-            return "Error: Username is taken.";
-          }
+          User u = new User(name);
+          data.SaveNewUser(u);
+          return "Registered account: " + name;
         }
-        users.Add(new User(name));
-        return "Registered account: " + name;
+        else return $"Username {name} is taken.";
+        
       }
       public string SelectLocation(string name)
       {

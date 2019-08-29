@@ -14,7 +14,7 @@ namespace PizzaBox.Client
 
           Session s = new Session();
           
-          Location l = new Location("Arlington", "100 Elm St");
+         /*  Location l = new Location("Arlington", "100 Elm St");
           Location l2 = new Location("Fort worth", "802 Pizza St");
           Location l3 = new Location("Dallas", "900 Cheese Rd");
           Cheese c = new Cheese("Swiss", (decimal)5.99);
@@ -29,7 +29,7 @@ namespace PizzaBox.Client
           l.Inventory.AddSize(sz);
           l.Inventory.SetInventory(t, 20);
           l.Inventory.SetInventory(t2, 20);
-          l.Inventory.SetInventory(t3, 20);
+          l.Inventory.SetInventory(t3, 20); */
 
           
           System.Console.WriteLine(s.SessionStart());
