@@ -27,7 +27,7 @@ namespace PizzaBox.Domain
       try
       {
         List<Data.Entities.User> user = db.User
-        .Where(u => u.Username.Equals(name.ToLower()))
+        .Where(u => u.Username.ToLower().Equals(name.ToLower()))
         .ToList();
 
         if(!(user.First() is null))
@@ -45,29 +45,66 @@ namespace PizzaBox.Domain
 
     public void RegisterLocation(string name, string address)
     {
-      Data.Entities.Location _loc = new Data.Entities.Location();
-      _loc.Name = name;
-      _loc.Address = address;
+      if(ReadLocation(name) is null)
+      {
+        Data.Entities.Location _loc = new Data.Entities.Location();
+        _loc.Name = name;
+        _loc.Address = address;
 
-      db.Add(_loc);
-      db.SaveChanges();
+        db.Add(_loc);
+        db.SaveChanges();
+      }
+ 
 
     }
     public List<Domain.Location> GetAllLocations()
     {
-      return new List<Location>();
+      try
+      {
+        List<Data.Entities.Location> locations = db.Location.ToList();
+        List<Domain.Location> output = new List<Location>();
+        foreach (var l in locations)
+        {
+          var i = new Location(l.Name, l.Address);
+          output.Add(i);
+        }
+        return output;
+      }
+      catch(System.InvalidOperationException)
+      {
+        return null;
+      }
     }
-    public Domain.Location GetLocation(string name)
+    public Domain.Location ReadLocation(string name)
     {
       try
       {
-        
+        List<Data.Entities.Location> location = db.Location
+            .Where(l => l.Name.ToLower().Equals(name.ToLower()))
+            .ToList();
+        Data.Entities.Location loc = location.First();
+        var o = new Location(loc.Name, loc.Address);
+        return o;
       }
-      catch
+      catch(System.InvalidOperationException)
       {
-
+        return null;
       }
-      return new Domain.Location("","");
+    }
+    public Data.Entities.Location GetLocationDataObject(string name)
+    {
+      try
+      {
+        List<Data.Entities.Location> location = db.Location
+            .Where(l => l.Name.ToLower().Equals(name.ToLower()))
+            .ToList();
+        Data.Entities.Location loc = location.First();
+        return loc;
+      }
+      catch(System.InvalidOperationException)
+      {
+        return null;
+      }
     }
     public void SaveOrder(Domain.Order order)
     {
@@ -76,6 +113,14 @@ namespace PizzaBox.Domain
     public List<Domain.Order> GetOrders(string username)
     {
       return new List<Order>();
+    }
+    public Domain.Inventory GetInventory(Domain.Location loc)
+    {
+      return new Domain.Inventory();
+    }
+    public void ModifyInventory(Domain.Location loc, Domain.PizzaComponent pc, int quantity)
+    {
+
     }
 
   }

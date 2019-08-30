@@ -5,8 +5,7 @@ namespace PizzaBox.Domain
 {
     public class Session
     {
-      public static List<User> users;
-      public static List<Location> locations;
+
       private User user;
 
       private Location location;
@@ -17,15 +16,12 @@ namespace PizzaBox.Domain
 
       public Session()
       {
-        locations = new List<Location>();
-        users = new List<User>();
         order = new Order();
         data = new DataAccess();
       }
 
       public string SessionStart()
       {
-        //set up data, print commands
 
         return  "----------------------------\n" +
                 "| Welcome To PizzaBox CLI! |\n" +
@@ -285,9 +281,9 @@ namespace PizzaBox.Domain
         "location select <location_name>\n" +
         "location menu\n" +
         "location history\n" +
-        "pizza list" +
+        "pizza list\n" +
         "pizza new custom\n" +
-        "pizza new <type>" +
+        "pizza new <type>\n" +
         "pizza <id> add <crust|cheese|size|topping> <name>\n" +
         "pizza <id> remove <crust|cheese|size|topping> <name>\n" +
         "order view\n" +
@@ -313,7 +309,7 @@ namespace PizzaBox.Domain
       private string ListLocations()
       {
         string output = "Available Locations:\n";
-        foreach (var l in locations)
+        foreach (var l in data.GetAllLocations())
         {
           output = output + l.ToString() + "\n";
         }
@@ -344,7 +340,7 @@ namespace PizzaBox.Domain
       }
       public string SelectLocation(string name)
       {
-        foreach (var l in locations)
+        foreach (var l in data.GetAllLocations())
         {
           if(name.ToLower() == l.Name.ToLower())
           {

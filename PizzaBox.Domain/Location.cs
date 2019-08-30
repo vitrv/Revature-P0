@@ -16,7 +16,6 @@ namespace PizzaBox.Domain
       Address = _address;
       Inventory = new Inventory();
       orderlog = new List<Order>();
-      Session.locations.Add(this);
     }
 
     public override string ToString()

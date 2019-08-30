@@ -14,9 +14,7 @@ namespace PizzaBox.Client
 
           Session s = new Session();
           
-         /*  Location l = new Location("Arlington", "100 Elm St");
-          Location l2 = new Location("Fort worth", "802 Pizza St");
-          Location l3 = new Location("Dallas", "900 Cheese Rd");
+        /* 
           Cheese c = new Cheese("Swiss", (decimal)5.99);
           Crust cr = new Crust("Thin", (decimal)1.50);
           Size sz = new Size("Small", 4.99M);
