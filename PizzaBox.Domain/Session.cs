@@ -22,7 +22,6 @@ namespace PizzaBox.Domain
 
       public string SessionStart()
       {
-
         return  "----------------------------\n" +
                 "| Welcome To PizzaBox CLI! |\n" +
                 "----------------------------\n" +
@@ -295,7 +294,8 @@ namespace PizzaBox.Domain
       {
         if(!(location is null))
         {
-          return location.Inventory.ToString();
+          Inventory i = data.GetInventory(location);
+          return i.ToString();
         }
         return "No location selected to display inventory";
       }
@@ -317,7 +317,7 @@ namespace PizzaBox.Domain
       }
       public string Login(string name)
       {
-        User u = data.GetUser(name);
+        User u = data.ReadUser(name);
         if(!(u is null))
         {
           user = u;
@@ -329,7 +329,7 @@ namespace PizzaBox.Domain
 
       public string RegisterUser(string name)
       {
-        if(data.GetUser(name) is null)
+        if(data.ReadUser(name) is null)
         {
           User u = new User(name);
           data.SaveNewUser(u);

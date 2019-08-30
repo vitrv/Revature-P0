@@ -22,7 +22,7 @@ namespace PizzaBox.Domain
       db.SaveChanges();
 
     }
-    public Domain.User GetUser(string name)
+    public Domain.User ReadUser(string name)
     {
       try
       {
@@ -91,7 +91,7 @@ namespace PizzaBox.Domain
         return null;
       }
     }
-    public Data.Entities.Location GetLocationDataObject(string name)
+    public Data.Entities.Location GetLocationEntity(string name)
     {
       try
       {
@@ -106,22 +106,85 @@ namespace PizzaBox.Domain
         return null;
       }
     }
-    public void SaveOrder(Domain.Order order)
+    public void SaveOrder(Domain.Order order, Domain.Location loc, Domain.User u)
     {
+      //get user and location entities
+      //create new order object
+      //populate with user, location and contained pizzas
+      //save
 
     }
-    public List<Domain.Order> GetOrders(string username)
+    public List<Domain.Order> GetUserOrders(string username)
     {
       return new List<Order>();
     }
+    public List<Domain.Order> GetLocationOrders(string username)
+    {
+      return new List<Order>();
+    }
+
     public Domain.Inventory GetInventory(Domain.Location loc)
     {
       return new Domain.Inventory();
     }
     public void ModifyInventory(Domain.Location loc, Domain.PizzaComponent pc, int quantity)
     {
+      Data.Entities.Location locEntity = GetLocationEntity(loc.Name);
+      Data.Entities.Component compEntity = GetComponentEntity(pc);
+
+      if (compEntity is null)
+      {
+        compEntity = RegisterComponent(pc);
+      }
+      Data.Entities.InventoryItem invEntity = locEntity.InventoryItem.ToList()
+          .Find(i => i.Cid.Equals(compEntity.Cid));
+      if (!(invEntity is null))
+      {
+        invEntity.Quantity = quantity;
+        db.SaveChanges();
+        return;
+      }
+      invEntity = new Data.Entities.InventoryItem();
+      invEntity.Loc = locEntity;
+      invEntity.C = compEntity;
+      invEntity.Quantity = quantity;
+      
+      locEntity.InventoryItem.Add(invEntity);
+      db.SaveChanges();
+
 
     }
+    public Data.Entities.Component RegisterComponent(Domain.PizzaComponent pc)
+    {
+        Data.Entities.Component _pc = new Data.Entities.Component();
+        _pc.Name = pc.Name;
+        _pc.Cost = pc.Cost;
+        _pc.Kind = pc.GetKind();
+
+        db.Add(_pc);
+        db.SaveChanges(); 
+        return _pc;
+
+    }
+    public Data.Entities.Component GetComponentEntity(Domain.PizzaComponent pc)
+    {
+      string kind = pc.GetKind();
+      try
+      {
+        List<Data.Entities.Component> component = db.Component
+        .Where(p => p.Name.ToLower().Equals(pc.Name.ToLower())
+        && p.Kind.ToLower().Equals(kind.ToLower()))
+        .ToList();
+        Data.Entities.Component comp = component.First();
+        return comp;
+      }
+      catch(System.InvalidOperationException)
+      {
+        return null;
+      }
+    }
+
+
 
   }
 }

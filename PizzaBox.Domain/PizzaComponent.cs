@@ -18,6 +18,10 @@ namespace PizzaBox.Domain
       string[] t = this.GetType().ToString().Split('.');
       return $"{t[2]}: {Name} \t\t Cost: ${Cost}";
     }
+    public string GetKind()
+    {
+      return this.GetType().ToString().Split('.')[2];
+    }
 
   }
       

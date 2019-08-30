@@ -8,13 +8,13 @@ namespace PizzaBox.Domain
     public string Address {get; set;}
 
     public List<Order> orderlog;
-    public Inventory Inventory {get; set;}
+    //public Inventory Inventory {get; set;}
 
     public Location(string _name, string _address)
     {
       Name = _name;
       Address = _address;
-      Inventory = new Inventory();
+      //Inventory = new Inventory();
       orderlog = new List<Order>();
     }
 
