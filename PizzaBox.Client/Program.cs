@@ -30,7 +30,7 @@ namespace PizzaBox.Client
               }
               catch (NullReferenceException)
               {
-                System.Console.WriteLine("Ingredient not found. Have you selected a location?");
+                System.Console.WriteLine("An error occured.");
               }
               
             }

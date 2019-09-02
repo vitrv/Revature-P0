@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PizzaBox.Data.Entities;
 
 namespace PizzaBox.Domain
@@ -83,7 +85,16 @@ namespace PizzaBox.Domain
             .Where(l => l.Name.ToLower().Equals(name.ToLower()))
             .ToList();
         Data.Entities.Location loc = location.First();
+
+        var invEntity = db.InventoryItem
+            .Include(c => c.C) 
+            .Where(ie => ie.LocId == loc.LocId)
+            .ToList();
+
+
+
         var o = new Location(loc.Name, loc.Address);
+        o.Inventory = GetInventory(invEntity);
         return o;
       }
       catch(System.InvalidOperationException)
@@ -123,10 +134,47 @@ namespace PizzaBox.Domain
       return new List<Order>();
     }
 
-    public Domain.Inventory GetInventory(Domain.Location loc)
+    public Domain.Inventory GetInventory(ICollection<Data.Entities.InventoryItem> invEntity)
     {
-      return new Domain.Inventory();
+      Inventory res = new Domain.Inventory();
+      foreach (var i in invEntity)
+      {
+        PizzaComponent pc = GenerateComponent(i.C.Name, i.C.Cost, i.C.Kind);
+        res.SetInventory(pc, i.Quantity);
+        if (i.C.Kind.ToLower() == "size")
+        {
+          res.AddSize((Size) pc);
+        }
+        else
+        {
+          res.SetInventory(pc, i.Quantity);
+        }
+      }
+      return res;
     }
+
+    private PizzaComponent GenerateComponent(string name, decimal cost, string kind)
+    {
+      if(kind.ToLower() == "cheese")
+      {
+        return new Cheese(name, cost);
+      }
+      if(kind.ToLower() == "size")
+      {
+        return new Size(name, cost);
+      }
+      if(kind.ToLower() == "topping")
+      {
+        return new Topping(name, cost);
+      }
+      if(kind.ToLower() == "crust")
+      {
+        return new Crust(name, cost);
+      }
+      //should never get here, log an error
+      return null;
+    }
+
     public void ModifyInventory(Domain.Location loc, Domain.PizzaComponent pc, int quantity)
     {
       Data.Entities.Location locEntity = GetLocationEntity(loc.Name);

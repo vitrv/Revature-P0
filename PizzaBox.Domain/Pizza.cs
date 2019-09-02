@@ -40,7 +40,7 @@ namespace PizzaBox.Domain
         {
           output = output + t.ToString() + "\n";
         }
-        output += "Cost: " + GetCost();
+        output += "Cost: $" + GetCost();
         return output;
       }
       public decimal GetCost()

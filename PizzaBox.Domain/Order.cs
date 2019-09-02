@@ -23,7 +23,7 @@ namespace PizzaBox.Domain
               p.ToString() + "\n";
             c++;
         }
-        output += "Total Cost: " + GetCost() + "\n";
+        output += "Total Cost: $" + GetCost() + "\n";
         return output;
       }
 

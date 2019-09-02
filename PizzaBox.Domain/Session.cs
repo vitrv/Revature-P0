@@ -294,7 +294,7 @@ namespace PizzaBox.Domain
       {
         if(!(location is null))
         {
-          Inventory i = data.GetInventory(location);
+          Inventory i = location.Inventory;
           return i.ToString();
         }
         return "No location selected to display inventory";
@@ -340,13 +340,11 @@ namespace PizzaBox.Domain
       }
       public string SelectLocation(string name)
       {
-        foreach (var l in data.GetAllLocations())
+        Location loc = data.ReadLocation(name);
+        if (!(loc is null))
         {
-          if(name.ToLower() == l.Name.ToLower())
-          {
-            location = l;
-            return "Selected location " + name;
-          }
+          location = loc;
+          return $"Selected location {name}.";
         }
         return "Location " + name + " not found.";
       }
