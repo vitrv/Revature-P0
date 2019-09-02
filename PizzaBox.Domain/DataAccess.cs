@@ -119,10 +119,57 @@ namespace PizzaBox.Domain
     }
     public void SaveOrder(Domain.Order order, Domain.Location loc, Domain.User u)
     {
-      //get user and location entities
-      //create new order object
-      //populate with user, location and contained pizzas
-      //save
+      try
+      {
+        List<Data.Entities.Location> location = db.Location
+            .Where(l => l.Name.ToLower().Equals(loc.Name.ToLower()))
+            .ToList();
+        Data.Entities.Location locEntity = location.First();
+
+        List<Data.Entities.User> user = db.User
+            .Where(us => us.Username.ToLower().Equals(u.Username.ToLower()))
+            .ToList();
+        Data.Entities.User userEntity = user.First();
+
+        Data.Entities.Order result = new Data.Entities.Order();
+        result.User = userEntity;
+        result.Loc = locEntity;
+
+        foreach (var p in order._pizzas)
+        {
+          Data.Entities.Pizza pizzaEntity = new Data.Entities.Pizza();
+
+          Data.Entities.PizzaComponent cheeseEntity = new Data.Entities.PizzaComponent();
+          cheeseEntity.C = GetComponentEntity(p.Cheese);
+
+          Data.Entities.PizzaComponent crustEntity = new Data.Entities.PizzaComponent();
+          crustEntity.C = GetComponentEntity(p.Crust);
+
+          Data.Entities.PizzaComponent sizeEntity = new Data.Entities.PizzaComponent();
+          sizeEntity.C = GetComponentEntity(p.Size);
+
+          pizzaEntity.PizzaComponent.Add(cheeseEntity);
+          pizzaEntity.PizzaComponent.Add(crustEntity);
+          pizzaEntity.PizzaComponent.Add(sizeEntity);
+
+          foreach (var t in p._toppings)
+          {
+            Data.Entities.PizzaComponent toppingEntity = new Data.Entities.PizzaComponent();
+            toppingEntity.C = GetComponentEntity(t);
+            
+            pizzaEntity.PizzaComponent.Add(toppingEntity);
+          }
+
+          result.Pizza.Add(pizzaEntity);
+        }
+
+        db.Add(result);
+        db.SaveChanges();
+      }
+      catch(System.InvalidOperationException)
+      {
+
+      }
 
     }
     public List<Domain.Order> GetUserOrders(string username)

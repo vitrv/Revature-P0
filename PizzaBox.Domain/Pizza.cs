@@ -11,7 +11,7 @@ namespace PizzaBox.Domain
 
       public Cheese Cheese {get;set;}
 
-      private List<Topping> _toppings;
+      public List<Topping> _toppings;
 
       
       public Pizza()

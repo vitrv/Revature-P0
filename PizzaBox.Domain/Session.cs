@@ -255,8 +255,10 @@ namespace PizzaBox.Domain
       {
         if(!(user is null))
         {
-          user.orderlog.Add(order);
-          location.orderlog.Add(order);
+          //need a check to make sure this is a complete pizza
+          //user.orderlog.Add(order);
+          //location.orderlog.Add(order);
+          data.SaveOrder(order, location, user);
           order = null;
           return "Order confirmed.";
         }
